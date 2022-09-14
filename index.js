@@ -8,100 +8,112 @@
 // ======== OBJECTS DEFINITIONS ========
 // Define your objects here
 
-const man = {
-  species: "human",
-  name: "Momo",
-  hands: 2,
-  legs: 2,
-  gender: "male",
-  saying: "I am Momo",
-  friends: ["Kamila", "Boba"],
-};
+class Inhabitant {
+  constructor(species, name, gender, saying, friends) {
+    this.species = species;
+    this.name = name;
+    this.gender = gender;
+    this.saying = saying;
+    this.friends = friends.join(", ");
+  }
 
-const woman = {
-  species: "human",
-  name: "Kamila",
-  hands: 2,
-  legs: 2,
-  gender: "female",
-  saying: "I am Kamila",
-  friends: ["Momo", "Boba", "Chico"],
-};
+  showPropertiesInhabitant() {
+    const valuesInhabitant = [];
+    const propertiesInhabitant = [
+      "species",
+      "name",
+      "gender",
+      "saying",
+      "friends",
+    ];
 
-const cat = {
-  species: "cat",
-  name: "Chico",
-  hands: 0,
-  legs: 4,
-  gender: "male",
-  saying: "meow-meow",
-  friends: ["Kamila", "Kity"],
-};
+    propertiesInhabitant.forEach((property) => {
+      property === "name"
+        ? valuesInhabitant.push(`<strong>${this[property]}</strong>`)
+        : property === "saying"
+        ? valuesInhabitant.push(`<em>"${this[property]}"</em>`)
+        : valuesInhabitant.push(this[property]);
+      return valuesInhabitant;
+    });
 
-const dog = {
-  species: "dog",
-  name: "Boba",
-  hands: 0,
-  legs: 4,
-  gender: "male",
-  saying: "woof-woof",
-  friends: ["Kamila", "Momo"],
-};
+    return valuesInhabitant;
+  }
+}
 
-const catWoman = {
-  species: "cat-woman",
-  name: "Kity",
-  hands: 2,
-  legs: 2,
-  gender: "female",
-  saying: cat.saying,
-  friends: ["Chico"],
-};
+class Human extends Inhabitant {
+  constructor(species, name, gender, saying, friends) {
+    super(species, name, gender, saying, friends);
+    this.hands = 2;
+    this.legs = 2;
+  }
 
-const population = [man, woman, cat, dog, catWoman];
-const populationProperties = [
-  "species",
-  "name",
-  "hands",
-  "legs",
-  "gender",
-  "saying",
-  "friends",
-];
+  showPropertiesInhabitant() {
+    const propertiesInhabitant = super.showPropertiesInhabitant();
+    propertiesInhabitant.splice(2, 0, this.hands, this.legs);
+    return propertiesInhabitant;
+  }
+}
 
-const printPopulation = (inhabitantes, inhabitantProperties) => {
-  inhabitantes.forEach((inhabitant) =>
-    print(
-      inhabitantProperties
-        .map((property) =>
-          property === "name"
-            ? `<strong>${inhabitant[property]}</strong>`
-            : property === "saying"
-            ? `<em>"${inhabitant[property]}"</em>`
-            : inhabitant[property]
-        )
-        .join("; ")
-    )
-  );
-};
+class NotHuman extends Inhabitant {
+  constructor(species, name, gender, saying, friends) {
+    super(species, name, gender, saying, friends);
+    this.legs = 4;
+  }
 
-printPopulation(population, populationProperties);
+  showPropertiesInhabitant() {
+    const propertiesInhabitant = super.showPropertiesInhabitant();
+    propertiesInhabitant.splice(2, 0, this.legs);
+    return propertiesInhabitant;
+  }
+}
 
-// ======== OUTPUT ========
-/* Use print(message) for output.
-   Default tag for message is <pre>. Use print(message,'div') to change containing element tag.
+class SuperHuman extends Human {
+  constructor(species, name, gender, saying, friends, superPower) {
+    super(species, name, gender, saying, friends);
+    this.superPower = superPower;
+  }
 
-   Message can contain HTML markup. You may also tweak index.html and/or styles.css.
-   However, please, REFRAIN from improving visuals at least until your code is reviewed
-   so code reviewers might focus on a single file that is index.js.
-   */
+  showPropertiesInhabitant() {
+    const propertiesInhabitant = super.showPropertiesInhabitant();
+    propertiesInhabitant.splice(5, 0, this.superPower);
+    return propertiesInhabitant;
+  }
+}
 
-/* Print examples:
-   print('ABC');
-   print('<strong>ABC</strong>');
-   print('<strong>ABC</strong>', 'div');
+const man = new Human("human", "Momo", "male", "I am Momo", ["Kamila", "Boba"]);
+const woman = new Human("human", "Kamila", "female", "I am Kamila", [
+  "Momo",
+  "Boba",
+  "Chico",
+]);
+const cat = new NotHuman("cat", "Chico", "male", "Meow-meow", [
+  "Kamila",
+  "Kity",
+]);
+const dog = new NotHuman("dog", "Boba", "male", "Woof-woof", [
+  "Kamila",
+  "Momo",
+  "Charly",
+]);
+const catWoman = new SuperHuman(
+  "cat-woman",
+  "Kity",
+  "female",
+  cat.saying + ", i love Batman",
+  ["Chico"],
+  "I can't fly"
+);
+const batMan = new SuperHuman(
+  "bat-man",
+  "Charly",
+  "male",
+  "I don't love Catwoman",
+  ["Boba"],
+  "I can fly"
+);
 
-   print('human; John; male; 2; 2; Hello world!; Rex, Tom, Jenny');
-   print('human; <strong>John</strong>; male; 2; 2; <em>Hello world!</em>; Rex, Tom, Jenny');
-   print('human; <strong>John</strong>; male; 2; 2; <em>Hello world!</em>; Rex, Tom, Jenny', 'div');
-   */
+const inhabitantes = [man, cat, catWoman, woman, batMan, dog];
+
+inhabitantes.forEach((inhabitant) =>
+  print(inhabitant.showPropertiesInhabitant().join("; "))
+);
