@@ -22,6 +22,7 @@ class Inhabitant {
     const propertiesInhabitant = [
       this.species,
       this.name,
+      this.legs,
       this.gender,
       this.saying,
       this.friends,
@@ -47,7 +48,7 @@ class Human extends Inhabitant {
 
   showPropertiesInhabitant() {
     const propertiesInhabitant = super.showPropertiesInhabitant();
-    propertiesInhabitant.splice(2, 0, this.hands, this.legs);
+    propertiesInhabitant.splice(2, 0, this.hands);
     return propertiesInhabitant;
   }
 }
@@ -58,9 +59,7 @@ class NotHuman extends Inhabitant {
   }
 
   showPropertiesInhabitant() {
-    const propertiesInhabitant = super.showPropertiesInhabitant();
-    propertiesInhabitant.splice(2, 0, this.legs);
-    return propertiesInhabitant;
+    return super.showPropertiesInhabitant();
   }
 }
 
